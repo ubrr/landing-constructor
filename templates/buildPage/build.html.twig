@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div style="display: none">
+        <div class="gjs-logo-cont">
+            <div class="gjs-logo-version"></div>
+        </div>
+    </div>
+
+    <div id="gjs" style="height:0px; overflow:hidden">
+
+        {{ content|raw }}
+
+        <style>
+            {{ style|raw }}
+        </style>
+    </div>
+
+    <script type="text/javascript">
+        var id = {{ id }};
+    </script>
+    <script src="{{ asset('public/asset/js/init.js') }}"></script>
+
+{% endblock %}
