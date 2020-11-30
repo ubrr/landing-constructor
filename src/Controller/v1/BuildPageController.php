@@ -6,6 +6,8 @@ namespace App\Controller\v1;
 
 use App\Controller\BaseController;
 use App\Service\BuildPageService;
+use App\Service\AuthManager\TokenAuthManager;
+use App\Service\ConstructorPage\ApiConstructorPage;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +16,13 @@ use Exception;
 
 class BuildPageController extends BaseController
 {
-    private BuildPageService $buildPageService;
+    private TokenAuthManager $tokenAuthManager;
+    private ApiConstructorPage $apiConstructorPage;
 
-    public function __construct(BuildPageService $buildPageService)
+    public function __construct(TokenAuthManager $tokenAuthManager, ApiConstructorPage $apiConstructorPage)
     {
-        $this->buildPageService = $buildPageService;
+        $this->tokenAuthManager = $tokenAuthManager;
+        $this->apiConstructorPage = $apiConstructorPage;
     }
 
     /**
@@ -27,7 +31,8 @@ class BuildPageController extends BaseController
     public function build(int $id): Response
     {
         try {
-            $content = $this->buildPageService->fetchContentPage((int) $id);
+            $content = (new BuildPageService($this->tokenAuthManager, $this->apiConstructorPage))
+                ->fetchContentPage((int) $id);
         } catch (Exception $e) {
             return $this->render('error.html.twig', [
                 'error' => $e->getMessage()
@@ -47,10 +52,10 @@ class BuildPageController extends BaseController
     public function save(int $id, Request $request): JsonResponse
     {
         try {
-            $content = $this->buildPageService->saveContentPage(
+            $content = (new BuildPageService($this->tokenAuthManager, $this->apiConstructorPage))->saveContentPage(
                 (int) $id,
                 $request->get('content'),
-                $request->get('style'),
+                $request->get('style')
             );
         } catch (Exception $e) {
             $this->json(['error' => $e->getMessage()]);

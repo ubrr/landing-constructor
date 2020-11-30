@@ -28,10 +28,3 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
-
-
-    App\Service\BuildPageService:
-        arguments:
-            $hostLoadContentPage: '%host_load_content_page%'
-            $hostSaveContentPage: '%host_save_content_page%'
-

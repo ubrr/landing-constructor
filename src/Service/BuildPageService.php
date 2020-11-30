@@ -4,54 +4,36 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Exceptions\PageNotFoundException;
+use App\Exceptions\InvalidActionUserException;
+use App\Service\AuthManager\AuthManagerInterface;
+use App\Service\ConstructorPage\ConstructorPageInterface;
 
 class BuildPageService
 {
-    private HttpClientService $httpClientService;
-    private string $hostLoadContentPage;
-    private string $hostSaveContentPage;
+    private AuthManagerInterface $authManager;
+    private ConstructorPageInterface $constructorPage;
 
-    private const KEY_CONTENT = 'content';
-    private const KEY_STYLE = 'style';
-
-    public function __construct(
-        HttpClientService $httpClientService,
-        string $hostLoadContentPage,
-        string $hostSaveContentPage
-    ) {
-        $this->httpClientService = $httpClientService;
-        $this->hostLoadContentPage = $hostLoadContentPage;
-        $this->hostSaveContentPage = $hostSaveContentPage;
+    public function __construct(AuthManagerInterface $authManager, ConstructorPageInterface $constructorPage)
+    {
+        $this->authManager = $authManager;
+        $this->constructorPage = $constructorPage;
     }
 
     public function fetchContentPage(int $id): array
     {
-        $content = $this->httpClientService->sendGet($this->hostLoadContentPage, ['query' => ['id' => $id]]);
-        $content = json_decode($content,true);
-
-        if (!array_key_exists (self::KEY_CONTENT, $content)
-            || !array_key_exists (self::KEY_STYLE, $content)
-        ) {
-            throw new PageNotFoundException('Content page not found');
+        if (!$this->authManager->canRead($id)) {
+            throw new InvalidActionUserException('Permission denied: The user cant get content page.');
         }
 
-        return $content;
+        return $this->constructorPage->getContentPage($id);
     }
 
-    public function saveContentPage(int $id, string $content, string $style): string
+    public function saveContentPage(int $id, string $content, string $style): array
     {
-        $content = $this->httpClientService->sendPost(
-            $this->hostSaveContentPage,
-            [
-                'body' => [
-                    'id' => $id,
-                    'content' => $content,
-                    'style' => $style
-                ]
-            ]
-        );
+        if (!$this->authManager->canSave($id)) {
+            throw new InvalidActionUserException('Permission denied: The user cant save content page.');
+        }
 
-        return $content;
+        return $this->constructorPage->saveContentPage($id, $content, $style);
     }
 }
