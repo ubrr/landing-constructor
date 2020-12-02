@@ -4,8 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    host_load_content_page: '%env(HOST_LOAD_CONTENT_PAGE)%'
-    host_save_content_page: '%env(HOST_SAVE_CONTENT_PAGE)%'
+    url_load_content_page: '%env(URL_LOAD_CONTENT_PAGE)%'
+    url_save_content_page: '%env(URL_SAVE_CONTENT_PAGE)%'
+
+    url_jwt_authentication: '%env(URL_JWT_AUTHENTICATION)%'
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +30,7 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+
+    App\Service\AuthManager\JwtTokenAuthenticator:
+        arguments:
+            $urlJwtAuthentication: '%url_jwt_authentication%'
