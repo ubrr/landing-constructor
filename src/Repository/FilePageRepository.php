@@ -21,23 +21,13 @@ class FilePageRepository implements PageRepositoryInterface
     public function savePage(int $id, string $content, string $style): void
     {
         try {
-            if (!$this->publicUploadsFilesystem->has(sprintf(static::PATH_FILE, $id))) {
-                $this->publicUploadsFilesystem->write(
-                    sprintf(static::PATH_FILE, $id),
-                    json_encode([
-                        ConstructorPageInterface::KEY_CONTENT => $content,
-                        ConstructorPageInterface::KEY_STYLE => $style
-                    ])
-                );
-            } else {
-                $this->publicUploadsFilesystem->update(
-                    sprintf(static::PATH_FILE, $id),
-                    json_encode([
-                        ConstructorPageInterface::KEY_CONTENT => $content,
-                        ConstructorPageInterface::KEY_STYLE => $style
-                    ])
-                );
-            }
+            $this->publicUploadsFilesystem->put(
+                sprintf(static::PATH_FILE, $id),
+                json_encode([
+                    ConstructorPageInterface::KEY_CONTENT => $content,
+                    ConstructorPageInterface::KEY_STYLE => $style
+                ])
+            );
         } catch (Exception $e) {
             throw new FileContentPageException($e->getMessage());
         }
