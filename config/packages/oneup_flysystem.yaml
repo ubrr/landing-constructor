@@ -1,0 +1,15 @@
+# Read the documentation: https://github.com/1up-lab/OneupFlysystemBundle/tree/master/Resources/doc/index.md
+oneup_flysystem:
+    adapters:
+        public_uploads_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/uploads'
+        var_uploads_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/tmp'
+
+    filesystems:
+        public_uploads_filesystem:
+            adapter: public_uploads_adapter
+        var_uploads_filesystem:
+            adapter: var_uploads_adapter

@@ -33,6 +33,7 @@ var editor  = grapesjs.init({
         'grapesjs-typed',
         'grapesjs-style-bg',
         'gjs-preset-webpage',
+        'gjs-iframe'
     ],
     pluginsOpts: {
         'grapesjs-lory-slider': {

@@ -6,8 +6,12 @@ namespace App\Controller\v1;
 
 use App\Controller\BaseController;
 use App\Service\BuildPageService;
-use App\Service\AuthManager\TokenAuthManager;
-use App\Service\ConstructorPage\ApiConstructorPage;
+use App\Service\Permission\PermissionService;
+use App\Service\ConstructorPage\{
+    ApiConstructorPage,
+    FileConstructorPage
+};
+use App\Service\AuthManager\JwtTokenAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +20,21 @@ use Exception;
 
 class BuildPageController extends BaseController
 {
-    private TokenAuthManager $tokenAuthManager;
+    private PermissionService $permissionService;
     private ApiConstructorPage $apiConstructorPage;
+    private JwtTokenAuthenticator $jwtTokenAuthenticator;
+    private FileConstructorPage $fileConstructorPage;
 
-    public function __construct(TokenAuthManager $tokenAuthManager, ApiConstructorPage $apiConstructorPage)
-    {
-        $this->tokenAuthManager = $tokenAuthManager;
+    public function __construct(
+        PermissionService $permissionService,
+        ApiConstructorPage $apiConstructorPage,
+        JwtTokenAuthenticator $jwtTokenAuthenticator,
+        FileConstructorPage $fileConstructorPage
+    ) {
+        $this->permissionService = $permissionService;
         $this->apiConstructorPage = $apiConstructorPage;
+        $this->jwtTokenAuthenticator = $jwtTokenAuthenticator;
+        $this->fileConstructorPage = $fileConstructorPage;
     }
 
     /**
@@ -30,9 +42,14 @@ class BuildPageController extends BaseController
      */
     public function build(int $id): Response
     {
+        $buildPageService = new BuildPageService(
+            $this->permissionService,
+            $this->fileConstructorPage,
+            $this->jwtTokenAuthenticator
+        );
+
         try {
-            $content = (new BuildPageService($this->tokenAuthManager, $this->apiConstructorPage))
-                ->fetchContentPage((int) $id);
+            $content = $buildPageService->fetchContentPage((int) $id);
         } catch (Exception $e) {
             return $this->render('error.html.twig', [
                 'error' => $e->getMessage()
@@ -51,14 +68,20 @@ class BuildPageController extends BaseController
      */
     public function save(int $id, Request $request): JsonResponse
     {
+        $buildPageService = new BuildPageService(
+            $this->permissionService,
+            $this->fileConstructorPage,
+            $this->jwtTokenAuthenticator
+        );
+
         try {
-            $content = (new BuildPageService($this->tokenAuthManager, $this->apiConstructorPage))->saveContentPage(
+            $content = $buildPageService->saveContentPage(
                 (int) $id,
                 $request->get('content'),
                 $request->get('style')
             );
         } catch (Exception $e) {
-            $this->json(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()]);
         }
 
         return $this->json(['content' => $content]);

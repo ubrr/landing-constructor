@@ -5,23 +5,34 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exceptions\InvalidActionUserException;
-use App\Service\AuthManager\AuthManagerInterface;
+use App\Service\Permission\PermissionServiceInterface;
 use App\Service\ConstructorPage\ConstructorPageInterface;
+use App\Service\AuthManager\AuthenticationInterface;
+use App\Exceptions\InvalidCredentialsException;
 
 class BuildPageService
 {
-    private AuthManagerInterface $authManager;
+    private PermissionServiceInterface $permissionService;
     private ConstructorPageInterface $constructorPage;
+    private AuthenticationInterface $authentication;
 
-    public function __construct(AuthManagerInterface $authManager, ConstructorPageInterface $constructorPage)
-    {
-        $this->authManager = $authManager;
+    public function __construct(
+        PermissionServiceInterface $permissionService,
+        ConstructorPageInterface $constructorPage,
+        AuthenticationInterface $authentication
+    ) {
+        $this->permissionService = $permissionService;
         $this->constructorPage = $constructorPage;
+        $this->authentication = $authentication;
     }
 
     public function fetchContentPage(int $id): array
     {
-        if (!$this->authManager->canRead($id)) {
+        if (!$this->authentication->checkCredentials()) {
+            throw new InvalidCredentialsException('Invalid credentials.');
+        }
+
+        if (!$this->permissionService->canRead($id)) {
             throw new InvalidActionUserException('Permission denied: The user cant get content page.');
         }
 
@@ -30,7 +41,11 @@ class BuildPageService
 
     public function saveContentPage(int $id, string $content, string $style): array
     {
-        if (!$this->authManager->canSave($id)) {
+        if (!$this->authentication->checkCredentials()) {
+            throw new InvalidCredentialsException('Invalid credentials.');
+        }
+
+        if (!$this->permissionService->canSave($id)) {
             throw new InvalidActionUserException('Permission denied: The user cant save content page.');
         }
 
