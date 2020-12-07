@@ -7,7 +7,10 @@ namespace App\Controller\v1;
 use App\Controller\BaseController;
 use App\Service\BuildPageService;
 use App\Service\Permission\PermissionService;
-use App\Service\ConstructorPage\ApiConstructorPage;
+use App\Service\ConstructorPage\{
+    ApiConstructorPage,
+    FileConstructorPage
+};
 use App\Service\AuthManager\JwtTokenAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,15 +23,18 @@ class BuildPageController extends BaseController
     private PermissionService $permissionService;
     private ApiConstructorPage $apiConstructorPage;
     private JwtTokenAuthenticator $jwtTokenAuthenticator;
+    private FileConstructorPage $fileConstructorPage;
 
     public function __construct(
         PermissionService $permissionService,
         ApiConstructorPage $apiConstructorPage,
-        JwtTokenAuthenticator $jwtTokenAuthenticator
+        JwtTokenAuthenticator $jwtTokenAuthenticator,
+        FileConstructorPage $fileConstructorPage
     ) {
         $this->permissionService = $permissionService;
         $this->apiConstructorPage = $apiConstructorPage;
         $this->jwtTokenAuthenticator = $jwtTokenAuthenticator;
+        $this->fileConstructorPage = $fileConstructorPage;
     }
 
     /**
@@ -38,7 +44,7 @@ class BuildPageController extends BaseController
     {
         $buildPageService = new BuildPageService(
             $this->permissionService,
-            $this->apiConstructorPage,
+            $this->fileConstructorPage,
             $this->jwtTokenAuthenticator
         );
 
@@ -64,7 +70,7 @@ class BuildPageController extends BaseController
     {
         $buildPageService = new BuildPageService(
             $this->permissionService,
-            $this->apiConstructorPage,
+            $this->fileConstructorPage,
             $this->jwtTokenAuthenticator
         );
 
@@ -75,7 +81,7 @@ class BuildPageController extends BaseController
                 $request->get('style')
             );
         } catch (Exception $e) {
-            $this->json(['error' => $e->getMessage()]);
+            return $this->json(['error' => $e->getMessage()]);
         }
 
         return $this->json(['content' => $content]);
