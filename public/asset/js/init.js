@@ -547,8 +547,8 @@ function saveContent() {
         url: '/save/' + id,
         type: 'post',
         data: {content: content, style: style}
-    }).done(function (rsp) {
-        alert(rsp);
+    }).done(function (response) {
+        alert(response.content.response);
     });
 }
 
