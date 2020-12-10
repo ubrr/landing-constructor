@@ -544,11 +544,13 @@ function saveContent() {
     let content = editor.getHtml();
     let style = editor.getCss();
     $.ajax({
-        url: '/save/' + id,
+        url: '/update/' + id,
         type: 'post',
         data: {content: content, style: style}
     }).done(function (response) {
-        alert(response.content.response);
+        alert(response.content.data.response);
+    }).fail(function() {
+        alert('Server unavailable.');
     });
 }
 

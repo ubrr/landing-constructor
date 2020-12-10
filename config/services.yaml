@@ -5,7 +5,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     url_load_content_page: '%env(URL_LOAD_CONTENT_PAGE)%'
-    url_save_content_page: '%env(URL_SAVE_CONTENT_PAGE)%'
+    url_update_content_page: '%env(URL_UPDATE_CONTENT_PAGE)%'
+
+    url_check_permission_read: '%env(URL_CHECK_PERMISSION_READ)%'
+    url_check_permission_update: '%env(URL_CHECK_PERMISSION_UPDATE)%'
 
     url_jwt_authentication: '%env(URL_JWT_AUTHENTICATION)%'
 
@@ -37,3 +40,13 @@ services:
     App\Service\AuthManager\JwtTokenAuthenticator:
         arguments:
             $urlJwtAuthentication: '%url_jwt_authentication%'
+
+    App\Service\ConstructorPage\ApiConstructorPage:
+        arguments:
+            $urlLoadContentPage: '%url_load_content_page%'
+            $urlUpdateContentPage: '%url_update_content_page%'
+
+    App\Service\Permission\ApiPermissionService:
+        arguments:
+            $urlCheckPermissionRead: '%url_check_permission_read%'
+            $urlCheckPermissionUpdate: '%url_check_permission_update%'

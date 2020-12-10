@@ -10,5 +10,5 @@ interface ConstructorPageInterface
     public const KEY_STYLE = 'style';
 
     public function getContentPage(int $id): array;
-    public function saveContentPage(int $id, string $content, string $style): array;
+    public function updateContentPage(int $id, string $content, string $style): array;
 }
