@@ -54,9 +54,9 @@ class ApiPermissionService implements PermissionServiceInterface
 
         try {
             $response = $this->client->request('GET', $url, ['auth_bearer' => $token]);
-            $content = json_decode($response->getContent(), true);
+            $content = $response->toArray();
 
-            if (!$response->getStatusCode() === Response::HTTP_OK && $content['data']) {
+            if ($content['status']) {
                 return false;
             };
 

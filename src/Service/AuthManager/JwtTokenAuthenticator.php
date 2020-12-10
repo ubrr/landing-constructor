@@ -37,14 +37,16 @@ class JwtTokenAuthenticator implements AuthenticationInterface
                 'auth_bearer' => $token
             ]);
 
-            $content = json_decode($response->getContent(), true);
+            $content = $response->toArray();
 
-            if ($response->getStatusCode() === Response::HTTP_OK && $content['data']) {
+            if ($content['status']) {
                 return true;
             }
 
         } catch (ExceptionInterface $e) {
-            throw new InvalidCredentialsException($e->getMessage());
+            if ($response->getStatusCode() !== Response::HTTP_UNAUTHORIZED) {
+                throw new InvalidCredentialsException($e->getMessage());
+            }
         }
 
         return false;

@@ -7,7 +7,6 @@ namespace App\Service\ConstructorPage;
 use App\Exceptions\ApiContentPageException;
 use App\Exceptions\PageNotFoundException;
 use App\Helper\JwtTokenHelper;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
@@ -43,9 +42,9 @@ class ApiConstructorPage implements ConstructorPageInterface
                 ],
             ]);
 
-            $content = json_decode($response->getContent(), true);
+            $content = $response->toArray();
 
-            if (!$response->getStatusCode() === Response::HTTP_OK && !empty($content['data'])) {
+            if (empty($content['data'])) {
                 throw new PageNotFoundException('Error in getting content page.');
             }
 
@@ -73,7 +72,7 @@ class ApiConstructorPage implements ConstructorPageInterface
                 ],
             ]);
 
-            $content = json_decode($response->getContent(), true);
+            $content = $response->toArray();
 
         } catch (ExceptionInterface $e) {
             throw new ApiContentPageException($e->getMessage());
