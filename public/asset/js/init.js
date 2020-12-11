@@ -374,6 +374,9 @@ editor.I18n.addMessages({
     }
 });
 
+// load components
+testButtonComponent(editor);
+
 var pn = editor.Panels;
 var modal = editor.Modal;
 var cmdm = editor.Commands;
@@ -499,7 +502,6 @@ pn.getButton('options', 'sw-visibility').set('active', 1);
 // Store and load events
 editor.on('storage:load', function(e) { console.log('Loaded ', e) });
 editor.on('storage:store', function(e) { console.log('Stored ', e) });
-
 
 // Do stuff on load
 editor.on('load', function() {
