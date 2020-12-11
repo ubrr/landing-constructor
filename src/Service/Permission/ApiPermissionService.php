@@ -6,7 +6,6 @@ namespace App\Service\Permission;
 
 use App\Exceptions\AccessDeniedException;
 use App\Helper\JwtTokenHelper;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
@@ -57,13 +56,13 @@ class ApiPermissionService implements PermissionServiceInterface
             $content = $response->toArray();
 
             if ($content['status']) {
-                return false;
+                return true;
             };
 
         } catch (ExceptionInterface $e) {
             throw new AccessDeniedException($e->getMessage());
         }
 
-        return true;
+        return false;
     }
 }
