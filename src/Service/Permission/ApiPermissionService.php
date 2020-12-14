@@ -6,6 +6,7 @@ namespace App\Service\Permission;
 
 use App\Exceptions\AccessDeniedException;
 use App\Helper\JwtTokenHelper;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
@@ -35,7 +36,7 @@ class ApiPermissionService implements PermissionServiceInterface
             return true;
         }
 
-        return true;
+        return false;
     }
 
     public function canUpdate(int $id): bool
@@ -60,7 +61,9 @@ class ApiPermissionService implements PermissionServiceInterface
             };
 
         } catch (ExceptionInterface $e) {
-            throw new AccessDeniedException($e->getMessage());
+            if ($response->getStatusCode() !== Response::HTTP_FORBIDDEN) {
+                throw new AccessDeniedException($e->getMessage());
+            }
         }
 
         return false;

@@ -551,8 +551,8 @@ function saveContent() {
         data: {content: content, style: style}
     }).done(function (response) {
         alert(response.content.data.response);
-    }).fail(function() {
-        alert('Server unavailable.');
+    }).fail(function(response) {
+        alert(response.responseJSON.error);
     });
 }
 

@@ -33,7 +33,7 @@ class BuildPageService
         }
 
         if (!$this->permissionService->canRead($id)) {
-            throw new InvalidActionUserException('Permission denied: The user cant get content page.');
+            throw new InvalidActionUserException('Permission denied: The user can not get content page.');
         }
 
         return $this->constructorPage->getContentPage($id);
@@ -46,7 +46,7 @@ class BuildPageService
         }
 
         if (!$this->permissionService->canUpdate($id)) {
-            throw new InvalidActionUserException('Permission denied: The user cant save content page.');
+            throw new InvalidActionUserException('Permission denied: The user can not save content page.');
         }
 
         return $this->constructorPage->updateContentPage($id, $content, $style);

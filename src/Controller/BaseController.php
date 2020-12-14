@@ -16,7 +16,11 @@ class BaseController extends AbstractController
 
     protected function internalServerErrorResponse($payload): JsonResponse
     {
-        return $this->json($payload, JsonResponse::HTTP_INTERNAL_SERVER_ERROR
-        );
+        return $this->json($payload, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    protected function resourceForbiddenResponse($payload): JsonResponse
+    {
+        return $this->json($payload, JsonResponse::HTTP_FORBIDDEN);
     }
 }

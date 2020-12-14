@@ -6,6 +6,7 @@ namespace App\Controller\v1;
 
 use App\Controller\BaseController;
 use App\Exceptions\AccessDeniedException;
+use App\Exceptions\InvalidActionUserException;
 use App\Factory\BuildPageFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,6 +58,8 @@ class BuildPageController extends BaseController
                 $request->get('content'),
                 $request->get('style')
             );
+        } catch (AccessDeniedException | InvalidActionUserException $e) {
+            return $this->resourceForbiddenResponse(['error' => $e->getMessage()]);
         } catch (Exception $e) {
             return $this->internalServerErrorResponse(['error' => $e->getMessage()]);
         }
