@@ -18,7 +18,7 @@ class FilePageRepository implements PageRepositoryInterface
         $this->varUploadsFilesystem = $varUploadsFilesystem;
     }
 
-    public function savePage(int $id, string $content, string $style): void
+    public function updatePage(int $id, string $content, string $style): void
     {
         try {
             $this->varUploadsFilesystem->put(

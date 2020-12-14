@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace App\Controller\v1;
 
 use App\Controller\BaseController;
-use App\Service\BuildPageService;
-use App\Service\Permission\PermissionService;
-use App\Service\ConstructorPage\{
-    ApiConstructorPage,
-    FileConstructorPage
-};
-use App\Service\AuthManager\JwtTokenAuthenticator;
+use App\Exceptions\AccessDeniedException;
+use App\Exceptions\InvalidActionUserException;
+use App\Factory\BuildPageFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,21 +16,11 @@ use Exception;
 
 class BuildPageController extends BaseController
 {
-    private PermissionService $permissionService;
-    private ApiConstructorPage $apiConstructorPage;
-    private JwtTokenAuthenticator $jwtTokenAuthenticator;
-    private FileConstructorPage $fileConstructorPage;
+    private BuildPageFactory $buildPageFactory;
 
-    public function __construct(
-        PermissionService $permissionService,
-        ApiConstructorPage $apiConstructorPage,
-        JwtTokenAuthenticator $jwtTokenAuthenticator,
-        FileConstructorPage $fileConstructorPage
-    ) {
-        $this->permissionService = $permissionService;
-        $this->apiConstructorPage = $apiConstructorPage;
-        $this->jwtTokenAuthenticator = $jwtTokenAuthenticator;
-        $this->fileConstructorPage = $fileConstructorPage;
+    public function __construct(BuildPageFactory $buildPageFactory)
+    {
+        $this->buildPageFactory = $buildPageFactory;
     }
 
     /**
@@ -42,11 +28,7 @@ class BuildPageController extends BaseController
      */
     public function build(int $id): Response
     {
-        $buildPageService = new BuildPageService(
-            $this->permissionService,
-            $this->fileConstructorPage,
-            $this->jwtTokenAuthenticator
-        );
+        $buildPageService = $this->buildPageFactory->getBuildPage();
 
         try {
             $content = $buildPageService->fetchContentPage((int) $id);
@@ -64,26 +46,24 @@ class BuildPageController extends BaseController
     }
 
     /**
-     * @Route("/save/{id}", name="app_page_save", methods={"POST"})
+     * @Route("/update/{id}", name="app_page_update", methods={"POST"})
      */
-    public function save(int $id, Request $request): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
-        $buildPageService = new BuildPageService(
-            $this->permissionService,
-            $this->fileConstructorPage,
-            $this->jwtTokenAuthenticator
-        );
+        $buildPageService = $this->buildPageFactory->getBuildPage();
 
         try {
-            $content = $buildPageService->saveContentPage(
+            $content = $buildPageService->updateContentPage(
                 (int) $id,
                 $request->get('content'),
                 $request->get('style')
             );
+        } catch (AccessDeniedException | InvalidActionUserException $e) {
+            return $this->resourceForbiddenResponse(['error' => $e->getMessage()]);
         } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()]);
+            return $this->internalServerErrorResponse(['error' => $e->getMessage()]);
         }
 
-        return $this->json(['content' => $content]);
+        return $this->successResponse(['content' => $content]);
     }
 }
