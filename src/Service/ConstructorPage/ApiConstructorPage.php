@@ -39,7 +39,7 @@ class ApiConstructorPage implements ConstructorPageInterface
                 'auth_bearer' => $token,
                 'query' => [
                     'id' => $id,
-                ],
+                ]
             ]);
 
             $content = $response->toArray();
@@ -60,16 +60,18 @@ class ApiConstructorPage implements ConstructorPageInterface
         $token = $this->jwtTokenHelper->getToken();
 
         try {
-            $response = $this->client->request('POST', $this->urlUpdateContentPage, [
+            $response = $this->client->request('PUT', $this->urlUpdateContentPage, [
                 'auth_bearer' => $token,
                 'headers'  => [
-                    'Content-type: application/x-www-form-urlencoded',
+                    'Content-type: application/json',
                 ],
-                'body' => [
+                'query' => [
                     'id' => $id,
+                ],
+                'json' => [
                     'content' => $content,
                     'style' => $style,
-                ],
+                ]
             ]);
 
             $content = $response->toArray();
