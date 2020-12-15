@@ -374,6 +374,9 @@ editor.I18n.addMessages({
     }
 });
 
+// load components
+testButtonComponent(editor);
+
 var pn = editor.Panels;
 var modal = editor.Modal;
 var cmdm = editor.Commands;
@@ -500,7 +503,6 @@ pn.getButton('options', 'sw-visibility').set('active', 1);
 editor.on('storage:load', function(e) { console.log('Loaded ', e) });
 editor.on('storage:store', function(e) { console.log('Stored ', e) });
 
-
 // Do stuff on load
 editor.on('load', function() {
     var $ = grapesjs.$;
@@ -544,11 +546,13 @@ function saveContent() {
     let content = editor.getHtml();
     let style = editor.getCss();
     $.ajax({
-        url: '/save/' + id,
+        url: '/update/' + id,
         type: 'post',
         data: {content: content, style: style}
-    }).done(function (rsp) {
-        alert(rsp);
+    }).done(function (response) {
+        alert(response.content.data.response);
+    }).fail(function(response) {
+        alert(response.responseJSON.error);
     });
 }
 

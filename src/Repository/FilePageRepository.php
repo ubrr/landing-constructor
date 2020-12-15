@@ -11,29 +11,26 @@ use League\Flysystem\Exception;
 
 class FilePageRepository implements PageRepositoryInterface
 {
-    private FilesystemInterface $varUploadsFilesystem;
+    /** @var FilesystemInterface $varUploadsFilesystem */
+    private $varUploadsFilesystem;
 
     public function __construct(FilesystemInterface $varUploadsFilesystem)
     {
         $this->varUploadsFilesystem = $varUploadsFilesystem;
     }
 
-    public function savePage(int $id, string $content, string $style): void
+    public function updatePage(int $id, string $content, string $style): void
     {
-        try {
-            $this->varUploadsFilesystem->put(
-                sprintf(static::PATH_FILE, $id),
-                json_encode([
-                    ConstructorPageInterface::KEY_CONTENT => $content,
-                    ConstructorPageInterface::KEY_STYLE => $style
-                ])
-            );
-        } catch (Exception $e) {
-            throw new FileContentPageException($e->getMessage());
-        }
+        $this->varUploadsFilesystem->put(
+            sprintf(static::PATH_FILE, $id),
+            json_encode([
+                ConstructorPageInterface::KEY_CONTENT => $content,
+                ConstructorPageInterface::KEY_STYLE => $style
+            ])
+        );
     }
 
-    public function getContentPage($id): array
+    public function getContentPage(int $id): array
     {
         try {
             if (!$this->varUploadsFilesystem->has(sprintf(static::PATH_FILE, $id))) {

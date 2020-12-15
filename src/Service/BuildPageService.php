@@ -12,9 +12,14 @@ use App\Exceptions\InvalidCredentialsException;
 
 class BuildPageService
 {
-    private PermissionServiceInterface $permissionService;
-    private ConstructorPageInterface $constructorPage;
-    private AuthenticationInterface $authentication;
+    /** @var PermissionServiceInterface $permissionService */
+    private $permissionService;
+
+    /** @var ConstructorPageInterface $constructorPage */
+    private $constructorPage;
+
+    /** @var AuthenticationInterface $authentication */
+    private $authentication;
 
     public function __construct(
         PermissionServiceInterface $permissionService,
@@ -33,22 +38,22 @@ class BuildPageService
         }
 
         if (!$this->permissionService->canRead($id)) {
-            throw new InvalidActionUserException('Permission denied: The user cant get content page.');
+            throw new InvalidActionUserException('Permission denied: The user can not get content page.');
         }
 
         return $this->constructorPage->getContentPage($id);
     }
 
-    public function saveContentPage(int $id, string $content, string $style): array
+    public function updateContentPage(int $id, string $content, string $style): array
     {
         if (!$this->authentication->checkCredentials()) {
             throw new InvalidCredentialsException('Invalid credentials.');
         }
 
-        if (!$this->permissionService->canSave($id)) {
-            throw new InvalidActionUserException('Permission denied: The user cant save content page.');
+        if (!$this->permissionService->canUpdate($id)) {
+            throw new InvalidActionUserException('Permission denied: The user can not save content page.');
         }
 
-        return $this->constructorPage->saveContentPage($id, $content, $style);
+        return $this->constructorPage->updateContentPage($id, $content, $style);
     }
 }

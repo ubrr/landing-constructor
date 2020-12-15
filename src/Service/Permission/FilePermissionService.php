@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Permission;
 
-class PermissionService implements PermissionServiceInterface
+class FilePermissionService implements PermissionServiceInterface
 {
     public function canRead(int $id): bool
     {
@@ -12,7 +12,7 @@ class PermissionService implements PermissionServiceInterface
         return true;
     }
 
-    public function canSave(int $id): bool
+    public function canUpdate(int $id): bool
     {
         // TODO: some logic to getting permission on save
         return true;

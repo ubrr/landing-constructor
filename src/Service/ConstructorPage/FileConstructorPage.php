@@ -8,7 +8,8 @@ use App\Repository\FilePageRepository;
 
 class FileConstructorPage implements ConstructorPageInterface
 {
-    private FilePageRepository $filePageRepository;
+    /** @var FilePageRepository $filePageRepository */
+    private $filePageRepository;
 
     public function __construct(FilePageRepository $filePageRepository)
     {
@@ -25,12 +26,12 @@ class FileConstructorPage implements ConstructorPageInterface
         ];
     }
 
-    public function saveContentPage(int $id, string $content, string $style): array
+    public function updateContentPage(int $id, string $content, string $style): array
     {
-        $this->filePageRepository->savePage($id, $content, $style);
+        $this->filePageRepository->updatePage($id, $content, $style);
 
         return [
-            'response' => 'Content was saved'
+            'response' => 'Content was updated'
         ];
     }
 }
