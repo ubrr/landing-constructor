@@ -33,7 +33,7 @@ class JwtTokenAuthenticator implements AuthenticationInterface
 
     public function checkCredentials(): bool
     {
-        $token =  $this->jwtTokenHelper->getToken();
+        $token = $this->jwtTokenHelper->getToken();
 
         if (!$token) {
             throw new InvalidCredentialsException('Jwt token does not exist!');

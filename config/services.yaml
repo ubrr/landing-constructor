@@ -9,8 +9,11 @@ parameters:
 
     url_check_permission_read: '%env(URL_CHECK_PERMISSION_READ)%'
     url_check_permission_update: '%env(URL_CHECK_PERMISSION_UPDATE)%'
+    url_check_hash_information: '%env(URL_CHECK_HASH_INFORMATION)%'
 
     url_jwt_authentication: '%env(URL_JWT_AUTHENTICATION)%'
+
+    hash_key: '%env(HASH_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -47,3 +50,11 @@ services:
         arguments:
             $urlCheckPermissionRead: '%url_check_permission_read%'
             $urlCheckPermissionUpdate: '%url_check_permission_update%'
+
+    App\Service\HashInformation\HashInformationService:
+       arguments:
+            $urlCheckHashInformation: '%url_check_hash_information%'
+
+    App\Helper\HashInformationHelper:
+        arguments:
+            $hashKey: '%hash_key%'
