@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\HashInformation;
 
-use App\Exceptions\InvalidCredentialsException;
 use App\Helper\HashInformationHelper;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Helper\JwtTokenHelper;
 
@@ -41,21 +40,20 @@ class HashInformationService implements HashInformationInterface
         $token = $this->jwtTokenHelper->getToken();
         $hashContent = $this->hashInformationHelper->getHash([$id, $content, $style, $token]);
 
-        try {
-             $this->client->request('POST', $this->urlCheckHashInformation, [
-                'auth_bearer' => $token,
-                'headers'  => [
-                    'Content-type: application/json',
-                ],
-                'json' => [
-                    'content' => $content,
-                    'style' => $style,
-                    'hash' => $hashContent,
-                    'id' => $id
-                ]
-            ]);
-        } catch (ExceptionInterface $e) {
-            throw new InvalidCredentialsException($e->getMessage());
+        $request = $this->client->request('POST', $this->urlCheckHashInformation, [
+            'auth_bearer' => $token,
+            'query' => [
+                'id' => $id,
+            ],
+            'body' => [
+                'content' => $content,
+                'style' => $style,
+                'hash' => $hashContent
+            ]
+        ]);
+
+        if ($request->getStatusCode() !== Response::HTTP_OK) {
+            return false;
         }
 
         return true;
