@@ -8,6 +8,7 @@ use App\Service\AuthManager\JwtTokenAuthenticator;
 use App\Service\ConstructorPage\ApiConstructorPage;
 use App\Service\Permission\ApiPermissionService;
 use App\Service\BuildPageService;
+use App\Service\HashInformation\HashInformationService;
 
 class BuildPageFactory
 {
@@ -20,14 +21,19 @@ class BuildPageFactory
     /** @var JwtTokenAuthenticator $jwtTokenAuthenticator */
     private $jwtTokenAuthenticator;
 
+    /** @var HashInformationService $hashInformationService */
+    private $hashInformationService;
+
     public function __construct(
         ApiPermissionService $apiPermissionService,
         ApiConstructorPage $apiConstructorPage,
-        JwtTokenAuthenticator $jwtTokenAuthenticator
+        JwtTokenAuthenticator $jwtTokenAuthenticator,
+        HashInformationService $hashInformationService
     ) {
         $this->apiPermissionService = $apiPermissionService;
         $this->apiConstructorPage = $apiConstructorPage;
         $this->jwtTokenAuthenticator = $jwtTokenAuthenticator;
+        $this->hashInformationService = $hashInformationService;
     }
 
     public function getBuildPage(): BuildPageService
@@ -35,7 +41,8 @@ class BuildPageFactory
         return new BuildPageService(
             $this->apiPermissionService,
             $this->apiConstructorPage,
-            $this->jwtTokenAuthenticator
+            $this->jwtTokenAuthenticator,
+            $this->hashInformationService
         );
     }
 }

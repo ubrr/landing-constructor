@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exceptions\InvalidActionUserException;
+use App\Exceptions\AccessDeniedException;
+use App\Service\HashInformation\HashInformationInterface;
 use App\Service\Permission\PermissionServiceInterface;
 use App\Service\ConstructorPage\ConstructorPageInterface;
 use App\Service\AuthManager\AuthenticationInterface;
@@ -21,14 +23,19 @@ class BuildPageService
     /** @var AuthenticationInterface $authentication */
     private $authentication;
 
+    /** @var HashInformationInterface $hashInformation */
+    private $hashInformation;
+
     public function __construct(
         PermissionServiceInterface $permissionService,
         ConstructorPageInterface $constructorPage,
-        AuthenticationInterface $authentication
+        AuthenticationInterface $authentication,
+        HashInformationInterface $hashInformation
     ) {
         $this->permissionService = $permissionService;
         $this->constructorPage = $constructorPage;
         $this->authentication = $authentication;
+        $this->hashInformation = $hashInformation;
     }
 
     public function fetchContentPage(int $id): array
@@ -50,8 +57,12 @@ class BuildPageService
             throw new InvalidCredentialsException('Invalid credentials.');
         }
 
+        if (!$this->hashInformation->checkHashInformation($id, $content, $style)) {
+            throw new AccessDeniedException('Permission denied: Invalid user.');
+        }
+
         if (!$this->permissionService->canUpdate($id)) {
-            throw new InvalidActionUserException('Permission denied: The user can not save content page.');
+            throw new InvalidActionUserException('Permission denied: The user can not update content page.');
         }
 
         return $this->constructorPage->updateContentPage($id, $content, $style);
