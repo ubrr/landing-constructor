@@ -8,7 +8,6 @@
     </div>
 
     <div id="gjs" style="height:0px; overflow:hidden">
-
         {{ content|raw }}
 
         <style>
@@ -17,6 +16,7 @@
     </div>
 
     <script type="text/javascript">
+        var styles = {{ asset_css_iframe()|raw }};
         var id = {{ id }};
     </script>
 
