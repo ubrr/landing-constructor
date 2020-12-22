@@ -1,7 +1,6 @@
 import React from "react";
 
 export const ExtraMoneyBox = (props) => {
-
     const changeSumOfExtraMoney = function(event) {
         let val = parseInt(event.target.value.replace(/\D/g, ''));
         if (val > props.maxsum) {
