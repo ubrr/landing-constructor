@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\v1;
 
 use App\Controller\BaseController;
-use App\Exceptions\AccessDeniedException;
-use App\Exceptions\InvalidActionUserException;
 use App\Factory\BuildPageFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Exception;
+use Throwable;
 
 class BuildPageController extends BaseController
 {
@@ -32,8 +30,9 @@ class BuildPageController extends BaseController
         $buildPageService = $this->buildPageFactory->getBuildPage();
 
         try {
-            $content = $buildPageService->fetchContentPage((int) $id);
-        } catch (Exception $e) {
+            $data = $buildPageService->fetchContentPage((int) $id);
+            $data = $data['data'];
+        } catch (Throwable $e) {
             return $this->render('error.html.twig', [
                 'error' => $e->getMessage()
             ]);
@@ -41,8 +40,8 @@ class BuildPageController extends BaseController
 
         return $this->render('buildPage/build.html.twig', [
             'id' => $id,
-            'content' => $content['content'] ? html_entity_decode($content['content']) : $content['content'],
-            'style' => $content['style'] ? html_entity_decode($content['style']) : $content['style']
+            'html' => $data['html'] ? html_entity_decode($data['html']) : $data['html'],
+            'style' => $data['style'] ? html_entity_decode($data['style']) : $data['style']
         ]);
     }
 
@@ -54,17 +53,16 @@ class BuildPageController extends BaseController
         $buildPageService = $this->buildPageFactory->getBuildPage();
 
         try {
-            $content = $buildPageService->updateContentPage(
+            $response = $buildPageService->updateContentPage(
                 (int) $id,
-                $request->get('content'),
+                $request->get('html'),
                 $request->get('style')
             );
-        } catch (AccessDeniedException | InvalidActionUserException $e) {
-            return $this->resourceForbiddenResponse(['error' => $e->getMessage()]);
-        } catch (Exception $e) {
-            return $this->internalServerErrorResponse(['error' => $e->getMessage()]);
-        }
 
-        return $this->successResponse(['content' => $content]);
+            return $this->successResponse($response);
+
+        } catch (Throwable $e) {
+            return $this->responseException($e->getMessage(), $e->getCode());
+        }
     }
 }

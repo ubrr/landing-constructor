@@ -555,16 +555,16 @@ editor.on('load', function() {
 });
 
 function saveContent() {
-    let content = editor.getHtml();
+    let html = editor.getHtml();
     let style = editor.getCss();
     $.ajax({
         url: '/update/' + id,
         type: 'post',
-        data: {content: content, style: style}
+        data: {html: html, style: style}
     }).done(function (response) {
-        alert(response.content.data.response);
+        alert(response.data.message);
     }).fail(function(response) {
-        alert(response.responseJSON.error);
+        alert(response.responseJSON.message);
     });
 }
 

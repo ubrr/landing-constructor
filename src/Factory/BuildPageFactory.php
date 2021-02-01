@@ -1,41 +1,31 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Factory;
 
-use App\Service\AuthManager\JwtTokenAuthenticator;
-use App\Service\ConstructorPage\ApiConstructorPage;
-use App\Service\Permission\ApiPermissionService;
+use App\Service\ConstructorPage\ApiConstructorPageService;
 use App\Service\BuildPageService;
+use App\Service\HashContent\HashContentService;
 
 class BuildPageFactory
 {
-    /** @var ApiPermissionService $apiPermissionService */
-    private $apiPermissionService;
-
-    /** @var ApiConstructorPage $apiConstructorPage */
+    /** @var ApiConstructorPageService $apiConstructorPage */
     private $apiConstructorPage;
 
-    /** @var JwtTokenAuthenticator $jwtTokenAuthenticator */
-    private $jwtTokenAuthenticator;
+    /** @var HashContentService $hashContentService */
+    private $hashContentService;
 
     public function __construct(
-        ApiPermissionService $apiPermissionService,
-        ApiConstructorPage $apiConstructorPage,
-        JwtTokenAuthenticator $jwtTokenAuthenticator
+        ApiConstructorPageService $apiConstructorPage,
+        HashContentService $hashContentService
     ) {
-        $this->apiPermissionService = $apiPermissionService;
         $this->apiConstructorPage = $apiConstructorPage;
-        $this->jwtTokenAuthenticator = $jwtTokenAuthenticator;
+        $this->hashContentService = $hashContentService;
     }
 
     public function getBuildPage(): BuildPageService
     {
-        return new BuildPageService(
-            $this->apiPermissionService,
-            $this->apiConstructorPage,
-            $this->jwtTokenAuthenticator
-        );
+        return new BuildPageService($this->apiConstructorPage, $this->hashContentService);
     }
 }

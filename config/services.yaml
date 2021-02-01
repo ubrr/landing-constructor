@@ -6,11 +6,8 @@
 parameters:
     url_load_content_page: '%env(URL_LOAD_CONTENT_PAGE)%'
     url_update_content_page: '%env(URL_UPDATE_CONTENT_PAGE)%'
-
-    url_check_permission_read: '%env(URL_CHECK_PERMISSION_READ)%'
-    url_check_permission_update: '%env(URL_CHECK_PERMISSION_UPDATE)%'
-
-    url_jwt_authentication: '%env(URL_JWT_AUTHENTICATION)%'
+    url_check_hash_content: '%env(URL_CHECK_HASH_CONTENT)%'
+    hash_key: '%env(HASH_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,16 +31,11 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Service\AuthManager\JwtTokenAuthenticator:
-        arguments:
-            $urlJwtAuthentication: '%url_jwt_authentication%'
-
-    App\Service\ConstructorPage\ApiConstructorPage:
+    App\Service\ConstructorPage\ApiConstructorPageService:
         arguments:
             $urlLoadContentPage: '%url_load_content_page%'
             $urlUpdateContentPage: '%url_update_content_page%'
 
-    App\Service\Permission\ApiPermissionService:
+    App\Service\HashContent\HashContentService:
         arguments:
-            $urlCheckPermissionRead: '%url_check_permission_read%'
-            $urlCheckPermissionUpdate: '%url_check_permission_update%'
+            $hashKey: '%hash_key%'
