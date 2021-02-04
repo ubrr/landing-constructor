@@ -1,0 +1,31 @@
+<div class="modal js-datetime-picker-form">
+    <div class="modal_header">
+        <h2 class="modal_title">Задайте дату и время отображения дизайна</h2>
+        <span class="modal_close js-modal-close">
+                    <i class="icon icon-cross">X</i>
+                </span>
+    </div>
+    <div class="modal_content">
+        <div class="form_inner">
+            <div class="input">
+                <input type="datetime" class="publicationTime input_field" readonly
+                       placeholder="Дата и время публкации">
+                <div id="publicationTimeBox"></div>
+            </div>
+        </div>
+        <div class="button-group modal_buttons">
+            <button class="button button_default modal_button js-save-content-page">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#publicationTimeBox').DateTimePicker({
+            shortDayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+            dateTimeFormat: 'dd-MM-yyyy HH:mm',
+            language: 'ru',
+            minDateTime: new Date()
+        });
+    });
+</script>

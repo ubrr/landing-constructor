@@ -2,10 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\Service\ConstructorPage;
+namespace App\Service\ContentPage;
 
-interface ConstructorPageInterface
+interface ProductContentPageInterface
 {
-    public function getContentPage(int $id): array;
     public function updateContentPage(int $id, string $html, string $style, string $hash): array;
 }

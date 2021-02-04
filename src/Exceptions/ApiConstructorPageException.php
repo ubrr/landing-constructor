@@ -9,8 +9,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiConstructorPageException extends RuntimeException
 {
-    public function __construct(string $message = '', $code = Response::HTTP_INTERNAL_SERVER_ERROR)
+    /** @var array $errors */
+    private $errors;
+
+    public function __construct(string $message = '', array $errors = [], $code = Response::HTTP_INTERNAL_SERVER_ERROR)
     {
+        $this->errors= $errors;
+
         parent::__construct($message, $code);
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

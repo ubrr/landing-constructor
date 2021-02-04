@@ -13,10 +13,10 @@ import 'grapesjs-preset-webpage/dist/grapesjs-preset-webpage.min.css';
 // start the Stimulus application
 import './bootstrap';
 
-import ReactDom from "react-dom";
-import React from "react";
+import ReactDom from 'react-dom';
+import React from 'react';
 import grapesjs from 'grapesjs';
-import $ from "jquery";
+import $ from 'jquery';
 import pluginTooltip from 'grapesjs-tooltip';
 import grapesjsCustomCode from 'grapesjs-custom-code';
 import grapesjsLorySlider from 'grapesjs-lory-slider';
@@ -439,7 +439,11 @@ cmdm.add('set-device-mobile', {
 cmdm.add('save-database', {
     run: function (em, sender) {
         sender.set('active', true);
-        saveContent();
+        if (!isEditDelayed) {
+            updateProductDesign();
+        } else {
+            showModalPublicationTimePicker();
+        }
     }
 });
 
@@ -447,13 +451,6 @@ cmdm.add('view-page', {
     run: function (em, sender) {
         sender.set('active', true);
         viewContent();
-    }
-});
-
-cmdm.add('update-page', {
-    run: function (em, sender) {
-        sender.set('active', true);
-        updateContent();
     }
 });
 
@@ -487,7 +484,7 @@ pn.addButton('options', [{
     className: 'fa fa-floppy-o',
     command: 'save-database',
     attributes: {
-        title: 'Save page',
+        title: 'Сохранить страницу',
         'data-tooltip-pos': 'bottom'
     }
 }]);
@@ -554,23 +551,86 @@ editor.on('load', function() {
     $('#gjs').append($('.ad-cont'));
 });
 
-function saveContent() {
+const publicationTimePicker = $('.publicationTime');
+
+const sendContent = (url) => {
     let html = editor.getHtml();
     let style = editor.getCss();
+    let publicationTime = publicationTimePicker.val();
     $.ajax({
-        url: '/update/' + id,
-        type: 'post',
-        data: {html: html, style: style}
+        url: url + id,
+        type: 'POST',
+        data: {html: html, style: style, publicationTime: publicationTime}
     }).done(function (response) {
-        alert(response.data.message);
+        showResponse(response.data);
     }).fail(function(response) {
-        alert(response.responseJSON.message);
+        showResponse(response.responseJSON);
     });
 }
 
+const showResponse = (data) => {
+    showModalWindow();
+    $('.js-modal-response').addClass('open');
+    $('.message-response').text(data.message);
+    $('.validate_message_error').detach();
+    if (data.errors) {
+        let errors = data.errors;
+        for (let key in errors) {
+            errors[key].map(function(error) {
+                $('.message-errors').append('<p class="validate_message_error">' + error + '</p>');
+            });
+        }
+    }
+}
+
+const updateProductDesign = () => {
+    sendContent('/updateProductDesign/');
+}
+
+const saveDelayDesign = () => {
+    sendContent('/saveDelayDesign/');
+}
+
+const showModalWindow = () => {
+    $('body').addClass('modal-open');
+    $('.overlay').addClass('visible');
+}
+
+const hideModalWindow = () => {
+    $('body').removeClass('modal-open');
+    $('.overlay').removeClass('visible');
+    $('.js-modal-response').removeClass('open');
+    $('.js-datetime-picker-form').removeClass('open');
+}
+
+const showModalPublicationTimePicker = () => {
+    showModalWindow();
+    $('.js-datetime-picker-form').addClass('open');
+}
+
+const deleteAllError = () => {
+    $('.input_error').detach();
+    $('input').removeClass('has-error')
+}
+
 $(document).ready(function () {
-    $('.btn-save-button').click(function () {
-        saveContent();
+    $('.overlay').click(function () {
+        hideModalWindow();
+    });
+
+    $('.js-modal-close').click(function () {
+        hideModalWindow();
+    });
+
+    $('.js-save-content-page').click(function () {
+        deleteAllError();
+        if (publicationTimePicker.val()) {
+            hideModalWindow();
+            saveDelayDesign();
+        } else {
+            publicationTimePicker.after('<p class="input_error">Не указано дата и время опубликации</p>');
+            publicationTimePicker.addClass('has-error');
+        }
     });
 });
 

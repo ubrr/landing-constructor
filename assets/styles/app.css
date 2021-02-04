@@ -152,3 +152,154 @@ html {
 .gjs-clm-tags-btn {
     width: 24px;
 }
+
+#gjs {
+    overflow:hidden;
+}
+
+.modal:not(.open) {
+    display: none;
+}
+
+.modal:not(.open) {
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    z-index: 993;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    overflow: auto;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.modal_header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 30px 16% 0px 30px;
+}
+
+.modal_title, .message-response{
+    font: 400 normal 24px/28px Roboto,sans-serif;
+}
+
+.modal_close {
+    position: absolute;
+    z-index: 1;
+    top: 47px;
+    right: 30px;
+    width: 29px;
+    height: 29px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+}
+
+.modal_close .icon {
+    font-size: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.modal_close .icon:before {
+    color: #bfc4c6;
+}
+
+.modal_content {
+    padding: 30px 30px 40px 30px;
+    text-align: center;
+}
+
+.form_inner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.modal_buttons {
+    margin-top: 24px;
+}
+
+.button-group {
+    text-align: center;
+}
+
+.modal_button {
+    font: 500 normal 14px/16px Roboto,sans-serif;
+    padding: 10px 42px;
+}
+
+body.modal-open {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.overlay_background {
+    background-color: rgba(33,33,33,.4);
+    z-index: 993;
+}
+
+.button_default {
+    padding: 10px 15px;
+}
+
+.overlay {
+    position: fixed;
+    z-index: 990;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay:not(.visible) {
+    display: none;
+}
+
+.input_field {
+    padding: 8px;
+    border: 1px solid rgba(191,196,198,.4);
+    border-radius: 2px;
+    outline: 0;
+    width: 96%;
+}
+
+.input_error {
+    font: 400 normal 13px/12px Roboto,sans-serif;
+    margin-top: 5px;
+    text-align: left;
+    color: #de1515;
+}
+
+.input_field.has-error {
+    border-color: #de1515;
+}
+
+.validate_message_error {
+    font: 400 normal 15px/12px Roboto,sans-serif;
+    margin-top: 5px;
+    color: #de1515;
+}

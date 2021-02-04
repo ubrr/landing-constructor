@@ -5,8 +5,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     url_load_content_page: '%env(URL_LOAD_CONTENT_PAGE)%'
+    url_load_delay_content_page: '%env(URL_LOAD_DELAY_CONTENT_PAGE)%'
+
     url_update_content_page: '%env(URL_UPDATE_CONTENT_PAGE)%'
-    url_check_hash_content: '%env(URL_CHECK_HASH_CONTENT)%'
+    url_save_delay_content_page: '%env(URL_SAVE_DELAY_CONTENT_PAGE)%'
     hash_key: '%env(HASH_KEY)%'
 
 services:
@@ -31,10 +33,21 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Service\ConstructorPage\ApiConstructorPageService:
+    App\Service\DesignPageReceiver\DelayProductDesignConnector:
+        arguments:
+            $urlLoadContentPage: '%url_load_delay_content_page%'
+
+    App\Service\DesignPageReceiver\ProductDesignConnector:
         arguments:
             $urlLoadContentPage: '%url_load_content_page%'
+
+    App\Service\ContentPage\ProductContentPageService:
+        arguments:
             $urlUpdateContentPage: '%url_update_content_page%'
+
+    App\Service\ContentPage\DelayContentPageService:
+        arguments:
+            $urlSaveDelayContentPage: '%url_save_delay_content_page%'
 
     App\Service\HashContent\HashContentService:
         arguments:

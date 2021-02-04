@@ -5,6 +5,12 @@
         <title>{% block title %}Builder the page!{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="{{ asset('asset/css/DateTimePicker.min.css') }}">
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('asset/js/jquery-3.5.1.min.js') }}"></script>
+            <script src="{{ asset('asset/js/DateTimePicker.min.js') }}"></script>
+            <script src="{{ asset('asset/js/DateTimePicker-i18n-ru.js') }}"></script>
         {% endblock %}
     </head>
     <body>
