@@ -28,10 +28,8 @@ import grapesjsTyped from 'grapesjs-typed';
 import grapesjsStyleBg from 'grapesjs-style-bg';
 import grapesjsPresetWebpage from 'grapesjs-preset-webpage';
 import grapesjsPluginIframe from 'grapesjs-plugin-iframe';
-import TestButton from "./modules/test-button/test-button";
 import { Calculator } from "./modules/calculator-form/components/Calculator";
-import calculatorFormAnyPurposeComponent from './modules/calculator-form/calculator-form-component';
-import testButtonComponent from './modules/test-button/test-button-component';
+import calculatorFormAnyPurposeComponent from './modules/calculator-form/calculatorFormComponent';
 
 const editor  = grapesjs.init({
     avoidInlineStyle: 1,
@@ -409,8 +407,6 @@ editor.I18n.addMessages({
     }
 });
 
-// load components
-testButtonComponent(editor);
 calculatorFormAnyPurposeComponent(editor);
 
 var pn = editor.Panels;
@@ -635,21 +631,25 @@ $(document).ready(function () {
 });
 
 if (frames[0].document) {
-    for (let style of styles) {
-        const cssLinkIframe = window.frames[0].document.createElement('link');
-        cssLinkIframe.href = style;
-        cssLinkIframe.rel = 'stylesheet';
-        cssLinkIframe.type = 'text/css';
-        window.frames[0].document.head.appendChild(cssLinkIframe);
+    for (let key in assetsIframe) {
+        switch (key) {
+            case 'css':
+                assetsIframe[key].forEach(function(path) {
+                    let cssIframe = window.frames[0].document.createElement('link');
+                    cssIframe.href = path;
+                    cssIframe.rel = 'stylesheet';
+                    cssIframe.type = 'text/css';
+                    window.frames[0].document.head.appendChild(cssIframe);
+                });
+                break;
+            case 'js':
+                assetsIframe[key].forEach(function(path) {
+                    let scriptIframe  = window.frames[0].document.createElement('script');
+                    scriptIframe.type = 'text/javascript';
+                    scriptIframe.src = path;
+                    window.frames[0].document.body.appendChild(scriptIframe);
+                });
+                break;
+        }
     }
 }
-
-frames[0].document.querySelectorAll('.test_button_container').forEach(el => {
-    ReactDom.render(<TestButton />, el);
-});
-
-frames[0].document.querySelectorAll('.calculator_form_container').forEach(el => {
-    const creditTitle = el.getAttribute('creditTitle');
-    ReactDom.render(<Calculator creditTitle={creditTitle}/>, el);
-});
-

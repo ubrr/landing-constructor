@@ -8,6 +8,7 @@
         "regenerator-runtime": "^0.13.2",
         "sass-loader": "^10.1.0",
         "stimulus": "^2.0.0",
+        "url-loader": "^4.1.1",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
