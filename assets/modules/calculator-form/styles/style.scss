@@ -1,0 +1,431 @@
+$xxl: 1366px; // Wide desktop
+$lg: 1024px; // Large screen / desktop
+$md: 768px; // Medium screen / tablet
+$font-family: 'Roboto', sans-serif;
+
+.calculatorForm {
+    .wrapper {
+        font-family: $font-family;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 16px;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .mainBox {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .whiteBox {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 32px;
+    }
+
+    .checkBoxText {
+        font-size: 15px;
+        line-height: 23px;
+        margin-left: 8px;
+    }
+
+    .inlineBox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .checkB {
+        min-width: 25px;
+        height: 25px;
+        width: 25px;
+        border-radius: 5px;
+        outline: none;
+        transition-duration: 0.3s;
+        background-color: #e9edf3;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .tooltipText {
+        border: 1px;
+        box-shadow: 0 0 30px rgba(52, 58, 70, 0.2);
+        font-size: 13px;
+        line-height: 16px;
+        color: #848D94;
+        visibility: hidden;
+        width: 190px;
+        background-color: white;
+        padding: 12px;
+
+        border-radius: 3px;
+        position: absolute;
+        z-index: 1;
+        top: 150%;
+    }
+
+    .tooltipText::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent white transparent;
+    }
+
+    .symbol {
+        cursor: default;
+        margin-left: 5px;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        height: 24px;
+        width: 24px;
+        font-size: 17px;
+        color: gray;
+        background: #e9edf3;
+        border-radius: 50%;
+    }
+
+    .symbol:hover {
+        visibility: visible;
+    }
+
+    .priceWrap {
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 31px;
+        display: flex;
+    }
+
+    .sliderBox {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .sliderHeader {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .text2 {
+        border: none;
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 31px;
+        text-align: right;
+        width: 100%;
+        -moz-appearance: textfield;
+    }
+
+    .text2::-webkit-outer-spin-button,
+    .text2::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .text2:focus {
+        outline: none;
+    }
+
+    .test1 {
+        font-size: 15px;
+        color: #848d94;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+    }
+
+    .runner {
+        margin-top: 15px;
+        margin-bottom: 25px;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 6px;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: 0.2s;
+        transition: 0.2s;
+        border-radius: 12px;
+    }
+
+    .runner:hover {
+        opacity: 1;
+    }
+
+    .runner::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #b50064;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .blueBox {
+        background-color: #d1d8e9;
+        border-radius: 5px;
+        padding: 24px 8px 30px;
+    }
+
+    .buttonPlus {
+        background-repeat: no-repeat;
+        cursor: pointer;
+        height: 100%;
+        width: 56px;
+        background-position: center center;
+        outline: none;
+    }
+
+    .buttonMinus {
+        border-radius: 3px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 100%;
+        width: 56px;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .input {
+        font-family: 'Roboto', 'PT Sans', sans-serif;
+        color: black;
+        font-size: 22px;
+        height: 100%;
+        width: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .textDoc {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 31px;
+        color: #3C3C44;
+        margin-top: 16px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .textRate {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 31px;
+        color: #3C3C44;
+        margin-top: 16px !important;
+        margin-bottom: 0px !important;
+    }
+
+    .titleMonthPay {
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 23px;
+        color: #3C3C44;
+    }
+
+    .textMonthPay {
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 21px;
+        color: #3C3C44;
+    }
+
+    .inputPlusAndMinus {
+        margin-top: 8px;
+        display: flex;
+        justify-content: space-between;
+        background-color: #f2f4f8;
+        height: 56px;
+        border-radius: 5px;
+    }
+
+
+    .inputHeader {
+        font-size: 15px;
+        color: rgb(132, 141, 148);
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        flex-shrink: 0;
+        margin-bottom: 10px;
+    }
+
+    .priceWrap {
+        font-family: $font-family;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 31px;
+        display: flex;
+    }
+
+    .inputSum {
+        font-family: $font-family;
+        display: flex;
+        font-weight: bold;
+        font-size: 20px;
+        color: #3C3C44;
+        line-height: 31px;
+        text-align: right;
+        width: 230px;
+        -moz-appearance: textfield;
+    }
+
+    .inputSum::-webkit-outer-spin-button,
+    .inputSum::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .inputSum:focus {
+        outline: none;
+    }
+
+    .listTermsBox {
+        padding: 0;
+        margin: 0;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .listTermsSelectionBox {
+        font-size: 20px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .listTermsText {
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 23px;
+        color: #3C3C44;
+        flex-shrink: 0;
+        margin-bottom: 8px;
+    }
+
+    .listTermsButton {
+        font-family: $font-family;
+        cursor: pointer;
+        width: 56px;
+        height: 30px;
+        margin-right: 4px;
+        font-size: 15px;
+        line-height: 23px;
+        border: 2px solid #d980b2;
+        box-sizing: border-box;
+        border-radius: 30px;
+        outline: none;
+        padding: 0;
+        text-align: center;
+        display: block;
+    }
+
+    @media (min-width: $md) {
+        .listTermsButton {
+            width: 80px;
+            height: 44px;
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 31px;
+            margin-right: 0;
+            margin-left: 16px;
+        }
+
+        .listTermsText {
+            display: flex;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 31px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-top: 6px;
+        }
+
+        .listTermsBox {
+            flex-direction: row;
+        }
+
+        .wrapper {
+            padding: 32px 56px 56px;
+            background: #FFFFFF;
+            box-shadow: 0 0 30px rgba(52, 58, 70, 0.2);
+            border-radius: 5px;
+        }
+
+        .title {
+            font-size: 26px;
+            line-height: 32px;
+            margin-bottom: 48px;
+        }
+
+        .whiteBox {
+            margin-bottom: 48px;
+        }
+
+        .checkBoxText {
+            font-size: 20px;
+            line-height: 31px;
+            margin-left: 24px;
+        }
+
+        .blueBox {
+            padding: 24px 118px 30px;
+        }
+    }
+
+    @media (min-width: $lg) {
+        .wrapper {
+            padding: 40px 32px 56px;
+        }
+
+        .mainBox {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .whiteBox {
+            width: calc(50% - 24px);
+            margin-bottom: 0;
+        }
+
+        .blueBox {
+            padding: 24px 32px;
+            width: calc(50% - 24px);
+            box-sizing: border-box;
+        }
+
+        .listTermsButton {
+            margin-bottom: 8px;
+        }
+    }
+
+    @media (min-width: $xxl) {
+        .whiteBox {
+            width: auto;
+            flex-grow: 1;
+            margin-right: 48px;
+        }
+
+        .blueBox {
+            width: 436px;
+        }
+    }
+}

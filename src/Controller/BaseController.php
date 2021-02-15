@@ -14,13 +14,20 @@ class BaseController extends AbstractController
         return $this->json($payload, JsonResponse::HTTP_OK);
     }
 
-    protected function internalServerErrorResponse($payload): JsonResponse
+    protected function responseException(
+        string $message,
+        int $code = JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+    ): JsonResponse
     {
-        return $this->json($payload, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->json(['message' => $message], $code);
     }
 
-    protected function resourceForbiddenResponse($payload): JsonResponse
+    protected function responseApiException(
+        string $message,
+        array $errors,
+        int $code = JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+    ): JsonResponse
     {
-        return $this->json($payload, JsonResponse::HTTP_FORBIDDEN);
+        return $this->json(['message' => $message, 'errors' => $errors], $code);
     }
 }

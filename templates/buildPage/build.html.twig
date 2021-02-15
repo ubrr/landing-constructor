@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="overlay overlay_background"></div>
     <div style="display: none">
         <div class="gjs-logo-cont">
             <div class="gjs-logo-version"></div>
         </div>
     </div>
 
-    <div id="gjs" style="height:0px; overflow:hidden">
-
-        {{ content|raw }}
+    <div id="gjs">
+        {{ html|raw }}
 
         <style>
             {{ style|raw }}
@@ -17,7 +17,12 @@
     </div>
 
     <script type="text/javascript">
+        var assetsIframe = {{ asset_components_iframe()|raw }};
         var id = {{ id }};
+        var isEditDelayed = {{ isEditDelayed }};
     </script>
+
+    {{ include('buildPage/modal-publication-time.html.twig') }}
+    {{ include('buildPage/modal-responce.html.twig') }}
 
 {% endblock %}

@@ -5,12 +5,11 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     url_load_content_page: '%env(URL_LOAD_CONTENT_PAGE)%'
+    url_load_delay_content_page: '%env(URL_LOAD_DELAY_CONTENT_PAGE)%'
+
     url_update_content_page: '%env(URL_UPDATE_CONTENT_PAGE)%'
-
-    url_check_permission_read: '%env(URL_CHECK_PERMISSION_READ)%'
-    url_check_permission_update: '%env(URL_CHECK_PERMISSION_UPDATE)%'
-
-    url_jwt_authentication: '%env(URL_JWT_AUTHENTICATION)%'
+    url_save_delay_content_page: '%env(URL_SAVE_DELAY_CONTENT_PAGE)%'
+    hash_key: '%env(HASH_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,16 +33,22 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Service\AuthManager\JwtTokenAuthenticator:
+    App\Service\DesignPageReceiver\DelayProductDesignConnector:
         arguments:
-            $urlJwtAuthentication: '%url_jwt_authentication%'
+            $urlLoadContentPage: '%url_load_delay_content_page%'
 
-    App\Service\ConstructorPage\ApiConstructorPage:
+    App\Service\DesignPageReceiver\ProductDesignConnector:
         arguments:
             $urlLoadContentPage: '%url_load_content_page%'
+
+    App\Service\ContentPage\ProductContentPageService:
+        arguments:
             $urlUpdateContentPage: '%url_update_content_page%'
 
-    App\Service\Permission\ApiPermissionService:
+    App\Service\ContentPage\DelayContentPageService:
         arguments:
-            $urlCheckPermissionRead: '%url_check_permission_read%'
-            $urlCheckPermissionUpdate: '%url_check_permission_update%'
+            $urlSaveDelayContentPage: '%url_save_delay_content_page%'
+
+    App\Service\HashContent\HashContentService:
+        arguments:
+            $hashKey: '%hash_key%'
